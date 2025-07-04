@@ -15,7 +15,7 @@
         <div class="flex flex-col md:flex-row gap-4">
             <input
                 type="url"
-                name="original_url"
+                name="original_link"
                 required
                 placeholder="Вставьте длинную ссылку здесь"
                 class="flex-grow rounded-md px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"

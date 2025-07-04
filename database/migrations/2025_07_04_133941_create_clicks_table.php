@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('clicks', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('link_id')->constrained()->onDelete('cascade');
+            $table->ipAddress('user_ip');
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

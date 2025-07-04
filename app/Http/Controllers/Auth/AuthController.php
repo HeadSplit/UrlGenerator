@@ -16,7 +16,7 @@ class AuthController extends Controller
         $data = $request->validated();
 
         if(Auth::attempt(['email' => $data['email'], 'password' => $data['password']]))
-            return redirect()->intended('/');
+            return redirect()->intended('/dashboard');
         return back()->withErrors(['Неверный логин или пароль']);
     }
 }

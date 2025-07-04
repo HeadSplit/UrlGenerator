@@ -2,29 +2,46 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Link extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'original_link',
+        'short_link',
+        'clicks',
+    ];
 
-    protected $fillable = ['original_link'];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    protected static function booted(): void
+    public function clicksRelation(): HasMany
     {
-        static::created(function (Link $link) {
+        return $this->hasMany(Click::class);
+    }
 
-            $shortLink = base_convert($link->id, 10, 36);
+    protected static function boot(): void
+    {
+        parent::boot();
 
-            $link->shortLink = $shortLink;
-            $link->save();
+        static::creating(function (Link $link) {
+                $link->short_link = self::generateUniqueShortLink();
         });
+    }
+
+    public static function generateUniqueShortLink(int $length = 6): string
+    {
+        do {
+            $shortLink = Str::random($length);
+        } while (self::where('short_link', $shortLink)->exists());
+
+        return $shortLink;
     }
 }
